@@ -6,7 +6,9 @@ using System.Globalization;
 using System.Diagnostics;
 using System.ComponentModel.DataAnnotations;
 List<String> tasks = new List<string>();
+
 Console.WriteLine("Hello!");
+
 bool shallexit = false;
 while (!shallexit)
 {
@@ -26,7 +28,7 @@ while (!shallexit)
         case "a":
             Addvoid();
             break;
-            
+
         case "S":
         case "s":
             SeeAllTodos();
@@ -36,54 +38,65 @@ while (!shallexit)
             RemoveTask();
             break;
         default:
-            Console.WriteLine("Invalid choicd");
+            Console.WriteLine("Invalid choice");
             break;
     }
 }
 
+Console.ReadKey();
+
 void Addvoid()
 {
-    bool isValdDescription = false;
-    while (!isValdDescription)
+    string description;
+    do
     {
         Console.Write("Write your new task: ");
-        string newTask = Console.ReadLine();
-        if (newTask == "")
-        {
-            Console.WriteLine("The task cannnot be empty");
-        }
-        else if (tasks.Contains(newTask))
-        {
-            Console.WriteLine("please try make unique task");
-        }
-        else
-        {
-            isValdDescription = true;
-            tasks.Add(newTask);
-        }
-    }
+        description = Console.ReadLine();
+    } while (!IsDescriptionValid(description));
+
+    tasks.Add(description);
 }
+
+bool IsDescriptionValid(string description)
+{
+    if (description == "")
+    {
+        Console.WriteLine("The task cannnot be empty");
+        return false;
+    }
+    else if (tasks.Contains(description))
+    {
+        Console.WriteLine("please try make unique task");
+        return false;
+    }
+    return true;
+}
+
 void SeeAllTodos()
 {
     if (tasks.Count == 0)
     {
-        Console.WriteLine("There are no task.");
+        ShowNoTodosMessage();
+        return;
     }
-    else
+    for (int i = 0; i < tasks.Count; ++i)
     {
-        for (int i = 0; i < tasks.Count; ++i)
-        {
-            Console.WriteLine($"{i + 1}: {tasks[i]}");
-        }
+        Console.WriteLine($"{i + 1}: {tasks[i]}");
     }
+    
 }
 void RemoveTask()
 {
     if (tasks.Count == 0)
     {
-        Console.WriteLine("There is no task left.");
+        ShowNoTodosMessage();
         return;
     }
+    TryReadIndex();
+}
+
+void TryReadIndex()
+{
     bool isVlidIndex = false;
     while (!isVlidIndex)
     {
@@ -112,10 +125,15 @@ void RemoveTask()
 
 
 
-Console.ReadKey();
+
 
 static void NewMethod()
 {
     Console.WriteLine("Please select index of task you want remove");
+}
+
+static void ShowNoTodosMessage()
+{
+    Console.WriteLine("There is no task left.");
 }
 
